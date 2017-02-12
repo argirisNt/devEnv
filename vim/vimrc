@@ -1,0 +1,308 @@
+"""""""""""""""""""""" General """"""""""""""""""""""
+set nocompatible              " be iMproved, required
+filetype off                  " required
+set noshowmode
+set foldenable
+" This is for scroll performance with relative numbers.
+" without this it lags disgustingly.
+set regexpengine=1
+
+" Sets how many lines of history VIM has to remember
+set history=1000
+set viminfo+=n~/.vim/viminfo
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" Turn on the WiLd menu
+set wildmenu
+
+" Do not wait at all when pressing esc key
+set timeoutlen=1000 ttimeoutlen=0
+
+" A buffer becomes hidden when it is abandoned
+set hid
+
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+
+" For regular expressions turn magic on
+set magic
+
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+
+" make copy and paste (middle mouse clipboard) play well with vim's yank, paste etc
+set clipboard=unnamedplus
+set tags+=./.tags;/
+
+"""""""""""""""""" End of general """""""""""""""""""""
+
+"""""""""""""""""""" Keymapping """""""""""""""""""""""
+" With a map leader it's possible to do extra key combinations
+" like <leader>w saves the current file
+let mapleader = " "
+let g:mapleader = " "
+
+" Fast saving with <space> w
+nmap <leader>w :w!<cr>
+" Fast quiting with <space> q
+nmap <leader>q :q<cr>
+
+" Cancel search
+nnoremap <silent> <Esc><Esc> <Esc>:nohlsearch<CR><Esc>
+
+" Map FZF to Ctrl-p
+map <C-p> :FZF<cr>
+
+" Smart way to move between panes
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" Useful mappings for managing tabs
+map <leader>t :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove
+
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>
+
+" Close the current buffer
+map <leader>bd :Bclose<cr>
+
+" grep search with <space> g
+map <leader>g :Ggrep
+
+" Go to next buffer
+map <leader>n :bn<cr>
+
+" Go to previous buffer
+map <leader>p :bp<cr>
+
+" Close buffer
+map <leader>d :bd<cr>
+
+" Open Explore vertically
+map <leader>e :Vex<cr>
+
+map <C-n> :set relativenumber!<cr>
+
+""""""""""""""""" End of keymapping """""""""""""""""""
+
+
+"""""""""""""""""""""" Search """"""""""""""""""""""""
+" Ignore case when searching
+set ignorecase
+
+" When searching try to be smart about cases
+set smartcase
+
+" Highlight search results
+set hlsearch
+
+" Makes search act like search in modern browsers
+set incsearch
+""""""""""""""""""" End of search """""""""""""""""""
+
+""""""""""""""""""""" Indentation """""""""""""""""""
+" Use spaces instead of tabs
+set expandtab
+
+" Be smart when using tabs ;)
+set smarttab
+
+" 1 tab == 2 spaces
+set shiftwidth=2
+set tabstop=2
+
+set ai "Auto indent
+set si "Smart indent
+"""""""""""""""""" End of indentation """""""""""""""
+
+""""""""""""""""""""" Ale linter """"""""""""""""""""
+let g:ale_linters = { 'javascript': ['eslint'] }
+let g:ale_sign_column_always = 1
+let g:ale_set_highlights = 0
+let g:ale_sign_error = '*'
+let g:ale_sign_warning = '.'
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+""""""""""""""""""" End of Ale linter """""""""""""""
+
+"""""""""""""""""""""" Explore """"""""""""""""""""""
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+""""""""""""""""" End of Explore """"""""""""""""""""
+
+""""""""""" Open grep results in quickfix """""""""""
+augroup myvimrc
+  autocmd!
+  autocmd QuickFixCmdPost [^l]* cwindow
+  autocmd QuickFixCmdPost l*    lwindow
+augroup END
+
+" Delete trailing white space on save, useful for Python and CoffeeScript ;)
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+autocmd BufWrite * :call DeleteTrailingWS()
+
+""""""""""""""""""""""" Plugins """""""""""""""""""""
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+
+" plugin from http://vim-scripts.org/vim/scripts.html
+Plugin 'L9'
+
+" Solarized colorscheme
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+" Highlight git diffs
+Plugin 'airblade/vim-gitgutter'
+
+" File search
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+
+" Comment stuff out using gcc/gc
+Plugin 'tpope/vim-commentary'
+
+" All aboud "surroundings": parentheses, brackets, quotes, XML tags, and more.
+" - cs<old_surrounding><new_surrounding> to change surrounding
+" - ds<surrounding> to delete the surrounding
+" - ys<text_object><surrounding> to add surrounding to text object
+" - S<surrounding> in visual mode
+" - surroundings: " ' ( ) [ ] { } <q> <em> <some_tag attr='val> ...
+Plugin 'tpope/vim-surround'
+
+" Make `.` work for tpope plugins (surround, unimpaired, commentary, and more).
+Plugin 'tpope/vim-repeat'
+
+" Wisely add 'end' in ruby, endfunction/endif/more in vim script, etc
+Plugin 'tpope/vim-endwise'
+
+" Perform all your vim insert mode completions with Tab. (very cool)
+Plugin 'ervandew/supertab'
+
+" Rails plugin
+Plugin 'tpope/vim-rails'
+
+" Syntax highlighting plugin for many languages
+Plugin 'sheerun/vim-polyglot'
+
+Plugin 'w0rp/ale'
+
+" Indentation guides
+Plugin 'yggdroot/indentline'
+
+Plugin 'ayu-theme/ayu-vim'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"""""""""""""""""""" End of plugins """"""""""""""""""""""""
+
+"""""""""""""""""""""" Display """"""""""""""""""""""""
+" Enable syntax highlighting
+syntax enable
+let &t_Co=256
+
+set termguicolors     " enable true colors support
+let ayucolor="light"  " for light version of theme
+colorscheme ayu
+
+set laststatus=2
+set encoding=utf-8
+
+"Always show current position
+set ruler
+
+" Show line numbers
+set number
+
+" Show 80 characters colums
+set colorcolumn=80,100
+
+" Height of the command bar
+set cmdheight=2
+
+" Show matching brackets when text indicator is over them
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
+"""""""""""""""""" End of display """"""""""""""""""""
+
+" Configure airline theme
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme             = 'ayu'
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+augroup filetypespecific
+  autocmd!
+" auto reload .vimrc
+  autocmd bufwritepost .vimrc source %
+augroup END
+
