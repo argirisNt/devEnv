@@ -1,0 +1,121 @@
+[color]
+  ui = true
+  diff = auto
+  status = auto
+  branch = auto
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red
+  new = green
+
+[alias]
+  # add
+  a = add                           # add
+  chunkyadd = add --patch           # stage commits chunk by chunk
+  ap = add -p
+
+  # branch
+  b = branch                        # branch (verbose)
+  br = branch                       # branch (verbose)
+
+  # commit
+  c = commit -m                     # commit with message
+  ca = commit -am                   # commit all with message
+  ci = commit                       # commit
+  fixup = commit --fixup            # fixup commit
+  amend = commit --amend            # ammend your last commit
+  ammend = commit --amend           # ammend your last commit
+
+  # checkout
+  co = checkout                     # checkout
+  nb = checkout -b                  # create and switch to a new branch (mnemonic: "git new branch branchname...")
+
+  # cherry-pick
+  cp = cherry-pick -x               # grab a change from a branch
+
+  # diff
+  d = diff                          # diff unstaged changes
+  dc = diff --cached                # diff staged changes
+  last = diff HEAD^                 # diff last committed change
+
+  # log
+  l = log --graph --decorate --abbrev-commit --pretty=oneline -n 30
+  #lg = log --graph --decorate --abbrev-commit --pretty=oneline -n 40
+  lg = log --graph --pretty=format:'%C(yellow)%h%Creset - %C(green)%an%Creset -%C(red)%d%Creset %s' --abbrev-commit --date=short -n 40
+  changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
+
+  # fetch
+  f = fetch
+  fp = fetch --all --prune
+
+  # pull
+  pl = pull                         # pull
+  pr = pull --rebase
+
+  # push
+  ps = push                         # push
+
+  # rebase
+  ri = rebase -i
+
+  # remote
+  r = remote -v                     # show remotes (verbose)
+
+  # reset
+  unstage = reset HEAD              # remove files from index (tracking)
+  uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
+
+  # status
+  st = status
+
+  # tags
+  ctags = !.git/hooks/ctags
+
+  # find
+  search = log --pretty=\"format:%Cgreen%H %Cblue%s\" --name-status --grep
+
+  # stats
+
+  # count commits in current branch
+  commits = rev-list master.. --count
+
+  # count commits per author
+  #
+  # e.g. git authors from..to
+  authors = shortlog -s -n --no-merges
+
+[log]
+  date = iso
+
+#[format]
+#  pretty = format:%C(yellow)%h%Creset%C(red)%d%Creset ∙ %C(blue)%ad%Creset ∙ %C(magenta)%an%Creset ∙ %C(green)%s
+
+[core]
+  editor = vi
+	excludesfile = ~/.gitignore
+
+[apply]
+  whitespace = nowarn
+
+[diff]
+  tool = vimdiff
+
+[difftool]
+  prompt = false
+
+[push]
+  # 'git push' will push the current branch to its tracking branch
+  # the usual default is to push all branches
+  default = tracking
+
+[rebase]
+  autosquash = true
+[init]
+  templatedir = ~/.git_template
